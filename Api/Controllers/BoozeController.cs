@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Models.Response;
+using Business.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -18,6 +19,13 @@ namespace api.Controllers
         // Bonus points
         // - Speed improvements
         // - Unit Tests
+
+        private readonly ICocktailService _cocktailService;
+
+        public BoozeController(ICocktailService cocktailService)
+        {
+            _cocktailService = cocktailService;
+        }
         
         [HttpGet]
         [Route("search-ingredient/{ingredient}")]
@@ -36,9 +44,7 @@ namespace api.Controllers
         [Route("random")]
         public async Task<IActionResult> GetRandom()
         {
-            var cocktail = new Cocktail();
-            // TODO - Go and get a random cocktail
-            // https://www.thecocktaildb.com/api/json/v1/1/random.php
+            var cocktail = await _cocktailService.GetRandomCocktail();
             return Ok(cocktail);
         }
     }

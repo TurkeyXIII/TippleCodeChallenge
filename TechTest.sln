@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{DE702722-0272-4FBF-9005-FB2024E83780}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{394A49EA-7A20-471F-9395-C77679DAFBCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{DE702722-0272-4FBF-9005-FB2024E83780}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE702722-0272-4FBF-9005-FB2024E83780}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE702722-0272-4FBF-9005-FB2024E83780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{394A49EA-7A20-471F-9395-C77679DAFBCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{394A49EA-7A20-471F-9395-C77679DAFBCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{394A49EA-7A20-471F-9395-C77679DAFBCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{394A49EA-7A20-471F-9395-C77679DAFBCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Business.Services;
+using Business.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,7 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-
+using Domain.Interfaces;
+using CocktailDb;
 
 namespace api
 {
@@ -27,6 +30,14 @@ namespace api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            ConfigureDependencies(services);
+        }
+
+        private void ConfigureDependencies(IServiceCollection services)
+        {
+            services.AddTransient<ICocktailService, CocktailService>();
+            services.AddTransient<ICocktailRepository, CocktailDbApi>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
