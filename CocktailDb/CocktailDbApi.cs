@@ -22,7 +22,10 @@ namespace CocktailDb
 
                 return new Cocktail
                 {
-                    Id = cocktailDto.IdDrink,
+                    Id              = cocktailDto.IdDrink,
+                    Name            = cocktailDto.StrDrink,
+                    Instructions    = cocktailDto.StrInstructions,
+                    ImageURL        = cocktailDto.StrDrinkThumb,
                 };
             }
         }
