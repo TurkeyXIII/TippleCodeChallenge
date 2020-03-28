@@ -2,13 +2,13 @@ using CocktailDb;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 
-namespace Tests.Api
+namespace Tests.CocktailDb
 {
     [TestClass]
-    public class CocktailDbApiTests
+    public class GetRandomCocktail
     {
         [TestMethod]
-        public async Task GetRandomCocktail_PopulatesId()
+        public async Task PopulatesId()
         {
             var api = new CocktailDbApi();
             
@@ -18,7 +18,7 @@ namespace Tests.Api
         }
 
         [TestMethod]
-        public async Task GetRandomCocktail_PopulatesStrings()
+        public async Task PopulatesStrings()
         {
             var api = new CocktailDbApi();
 
@@ -30,7 +30,7 @@ namespace Tests.Api
         }
 
         [TestMethod]
-        public async Task GetRandomCocktail_PopulatesIngredientList()
+        public async Task PopulatesIngredientList()
         {
             var api = new CocktailDbApi();
 
