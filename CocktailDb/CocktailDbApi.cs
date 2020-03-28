@@ -26,6 +26,7 @@ namespace CocktailDb
                     Name            = cocktailDto.StrDrink,
                     Instructions    = cocktailDto.StrInstructions,
                     ImageURL        = cocktailDto.StrDrinkThumb,
+                    Ingredients     = cocktailDto.Ingredients,
                 };
             }
         }

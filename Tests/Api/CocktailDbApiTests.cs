@@ -28,5 +28,17 @@ namespace Tests.Api
             Assert.IsFalse(string.IsNullOrWhiteSpace(cocktail.Instructions));
             Assert.IsFalse(string.IsNullOrWhiteSpace(cocktail.ImageURL));
         }
+
+        [TestMethod]
+        public async Task GetRandomCocktail_PopulatesIngredientList()
+        {
+            var api = new CocktailDbApi();
+
+            var cocktail = await api.GetRandomCocktail();
+
+            Assert.IsTrue(cocktail.Ingredients.Count > 1);
+            CollectionAssert.AllItemsAreNotNull(cocktail.Ingredients);
+            CollectionAssert.AllItemsAreUnique(cocktail.Ingredients);
+        }
     }
 }
