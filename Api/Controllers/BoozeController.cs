@@ -45,7 +45,9 @@ namespace api.Controllers
         public async Task<IActionResult> GetRandom()
         {
             var cocktail = await _cocktailService.GetRandomCocktail();
-            return Ok(cocktail);
+
+            var model = new Cocktail(cocktail);
+            return Ok(model);
         }
     }
 }
