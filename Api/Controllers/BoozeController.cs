@@ -25,8 +25,9 @@ namespace api.Controllers
         public async Task<IActionResult> GetIngredientSearch([FromRoute] string ingredient)
         {
             var cocktailList = await _cocktailService.GetCocktailsByIngredient(ingredient);
-            
-            return Ok(cocktailList);
+
+            var model = new CocktailList(cocktailList);
+            return Ok(model);
         }
 
         [HttpGet]
