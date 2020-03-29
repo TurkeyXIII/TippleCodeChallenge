@@ -11,16 +11,25 @@ namespace CocktailDb
 {
     public class CocktailDbApi : ICocktailRepository
     {
+        private const string uri = @"https://www.thecocktaildb.com/api/json/v1/1/";
+
         public async Task<List<int>> GetCocktailIdsByIngredient(string ingredient)
         {
+            List<Dtos.CocktailSummary> summaryDtos = await GetByPath<Dtos.CocktailSummary>($"filter.php?i={ingredient}");
+
+            return summaryDtos.Select(s => s.IdDrink).ToList();
+        }
+
+        private async Task<List<T>> GetByPath<T>(string path)
+        {
             using HttpClient client = new HttpClient();
-            HttpResponseMessage responseMessage = await client.GetAsync($"https://www.thecocktaildb.com/api/json/v1/1/filter.php?i={ingredient}");
+            HttpResponseMessage responseMessage = await client.GetAsync(uri + path);
 
             string json = await responseMessage.Content.ReadAsStringAsync();
 
-            List<Dtos.CocktailSummary> summaryDtos = JsonConvert.DeserializeObject<Dictionary<string, List<Dtos.CocktailSummary>>>(json)["drinks"];
+            List<T> summaryDtos = JsonConvert.DeserializeObject<Dictionary<string, List<T>>>(json)["drinks"];
 
-            return summaryDtos.Select(s => s.IdDrink).ToList();
+            return summaryDtos;
         }
 
         public async Task<Cocktail> GetCocktailById()
@@ -30,12 +39,7 @@ namespace CocktailDb
 
         public async Task<Cocktail> GetRandomCocktail()
         {
-            using HttpClient client = new HttpClient();
-            HttpResponseMessage responseMessage = await client.GetAsync("https://www.thecocktaildb.com/api/json/v1/1/random.php");
-
-            string json = await responseMessage.Content.ReadAsStringAsync();
-
-            Dtos.Cocktail cocktailDto = JsonConvert.DeserializeObject<Dictionary<string, List<Dtos.Cocktail>>>(json)["drinks"][0];
+            Dtos.Cocktail cocktailDto = (await GetByPath<Dtos.Cocktail>("random.php"))[0];
 
             return new Cocktail
             {
