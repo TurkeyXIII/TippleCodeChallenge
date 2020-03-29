@@ -32,15 +32,15 @@ namespace CocktailDb
             return summaryDtos;
         }
 
-        public async Task<Cocktail> GetCocktailById()
+        public async Task<Cocktail> GetCocktailById(int id)
         {
-            throw new NotImplementedException();
+            Dtos.Cocktail cocktailDto = (await GetByPath<Dtos.Cocktail>($"lookup.php?i={id}"))[0];
+
+            return MapCocktailDtoOntoDomainObject(cocktailDto);
         }
 
-        public async Task<Cocktail> GetRandomCocktail()
+        private Cocktail MapCocktailDtoOntoDomainObject(Dtos.Cocktail cocktailDto)
         {
-            Dtos.Cocktail cocktailDto = (await GetByPath<Dtos.Cocktail>("random.php"))[0];
-
             return new Cocktail
             {
                 Id = cocktailDto.IdDrink,
@@ -49,6 +49,13 @@ namespace CocktailDb
                 ImageURL = cocktailDto.StrDrinkThumb,
                 Ingredients = cocktailDto.Ingredients,
             };
+        }
+
+        public async Task<Cocktail> GetRandomCocktail()
+        {
+            Dtos.Cocktail cocktailDto = (await GetByPath<Dtos.Cocktail>("random.php"))[0];
+
+            return MapCocktailDtoOntoDomainObject(cocktailDto);
         }
     }
 }

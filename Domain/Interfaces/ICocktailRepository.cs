@@ -8,7 +8,7 @@ namespace Domain.Interfaces
     public interface ICocktailRepository
     {
         Task<List<int>> GetCocktailIdsByIngredient(string ingredient);
-        Task<Cocktail> GetCocktailById();
+        Task<Cocktail> GetCocktailById(int id);
         Task<Cocktail> GetRandomCocktail();
 
     }
