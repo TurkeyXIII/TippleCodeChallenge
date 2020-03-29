@@ -20,10 +20,17 @@ namespace Business.Services
         {
             var ids = await _cocktailRepository.GetCocktailIdsByIngredient(ingredient);
 
-            var cocktails = new List<Cocktail>(ids.Count);
+            List<Task<Cocktail>> cocktailTasks = new List<Task<Cocktail>>(ids.Count);
             foreach (var id in ids)
             {
-                var cocktail = await _cocktailRepository.GetCocktailById(id);
+                var cocktailTask = _cocktailRepository.GetCocktailById(id);
+                cocktailTasks.Add(cocktailTask);
+            }
+
+            var cocktails = new List<Cocktail>(ids.Count);
+            foreach (var task in cocktailTasks)
+            {
+                var cocktail = await task;
                 cocktails.Add(cocktail);
             }
 
