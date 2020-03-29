@@ -13,13 +13,6 @@ namespace api.Controllers
     [ApiController]
     public class BoozeController : ControllerBase
     {
-        // We will use the public CocktailDB API as our backend
-        // https://www.thecocktaildb.com/api.php
-        //
-        // Bonus points
-        // - Speed improvements
-        // - Unit Tests
-
         private readonly ICocktailService _cocktailService;
 
         public BoozeController(ICocktailService cocktailService)
@@ -31,12 +24,8 @@ namespace api.Controllers
         [Route("search-ingredient/{ingredient}")]
         public async Task<IActionResult> GetIngredientSearch([FromRoute] string ingredient)
         {
-            var cocktailList = new CocktailList();
-            // TODO - Search the CocktailDB for cocktails with the ingredient given, and return the cocktails
-            // https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Gin
-            // You will need to populate the cocktail details from
-            // https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=11007
-            // The calculate and fill in the meta object
+            var cocktailList = await _cocktailService.GetCocktailsByIngredient(ingredient);
+            
             return Ok(cocktailList);
         }
 

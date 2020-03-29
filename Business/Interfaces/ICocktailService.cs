@@ -8,6 +8,7 @@ namespace Business.Interfaces
 {
     public interface ICocktailService
     {
+        Task<List<Cocktail>> GetCocktailsByIngredient(string ingredient);
         Task<Cocktail> GetRandomCocktail();
     }
 }
