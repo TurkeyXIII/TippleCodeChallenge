@@ -30,9 +30,9 @@ namespace CocktailDb
 
         private JObject AddPropertiesRecursive(JObject item, JToken currentToken)
         {
-            if (currentToken is JProperty)
+            if (currentToken.Type == JTokenType.Property && currentToken.Children().Count() == 1)
             {
-                return item;
+                item = AddPropertiesRecursive(item, currentToken.Children().Single());
             }
 
             if (currentToken.Type == JTokenType.Array)
