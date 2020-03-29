@@ -78,57 +78,5 @@ namespace Tests.Models
 
             Assert.AreEqual(2, cocktailList.meta.medianIngredientCount);
         }
-
-        [TestMethod]
-        public void MetadataHasCorrectMedianIngredient_ManyWithSameCount()
-        {
-            List<Cocktail> cocktailsWithIngredients = new List<Cocktail>
-            {
-                new Cocktail
-                {
-                    Ingredients = new List<string> { "1" },
-                },
-                new Cocktail
-                {
-                    Ingredients = new List<string> { "1" },
-                },
-                new Cocktail
-                {
-                    Ingredients = new List<string> { "1" },
-                },
-                new Cocktail
-                {
-                    Ingredients = new List<string> { "1" },
-                },
-                new Cocktail
-                {
-                    Ingredients = new List<string> { "1", "2", "3", "4", "5", "6" },
-                }
-            };
-
-            CocktailList cocktailList = new CocktailList(cocktailsWithIngredients);
-
-            Assert.AreEqual(1, cocktailList.meta.medianIngredientCount);
-        }
-
-        [TestMethod]
-        public void MetadataHasCorrectMedianIngredient_EvenNumberOfCocktails()
-        {
-            List<Cocktail> cocktailsWithIngredients = new List<Cocktail>
-            {
-                new Cocktail
-                {
-                    Ingredients = new List<string> { "1", "2" },
-                },
-                new Cocktail
-                {
-                    Ingredients = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
-                },
-            };
-
-            CocktailList cocktailList = new CocktailList(cocktailsWithIngredients);
-
-            Assert.AreEqual((int)5.5, cocktailList.meta.medianIngredientCount);
-        }
     }
 }
