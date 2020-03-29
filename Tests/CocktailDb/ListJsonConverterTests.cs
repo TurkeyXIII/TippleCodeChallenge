@@ -59,6 +59,35 @@ namespace Tests.CocktailDb
             CollectionAssert.Contains(result.ListOfManyStrings, input.ListOfManyStrings2);
             CollectionAssert.Contains(result.ListOfManyStrings, input.ListOfManyStrings3);
         }
+
+        [TestMethod]
+        public void Deserialize_ListIsInChildObject()
+        {
+            var input = new Dictionary<string, List<InputObject>>
+            {
+                {
+                    "test",
+                    new List<InputObject>
+                    {
+                        new InputObject
+                        {
+                        ListOfManyStrings1 = "abc",
+                        ListOfManyStrings2 = "xyz",
+                        ListOfManyStrings3 = "123",
+                        }
+                    }
+                }
+            };
+            string json = JsonConvert.SerializeObject(input);
+
+            var result = JsonConvert.DeserializeObject<Dictionary<string, List<ResultObject>>>(json, new ListJsonConverter());
+
+            Assert.AreEqual(3, result["test"][0].ListOfManyStrings.Count);
+
+            CollectionAssert.Contains(result["test"][0].ListOfManyStrings, input["test"][0].ListOfManyStrings1);
+            CollectionAssert.Contains(result["test"][0].ListOfManyStrings, input["test"][0].ListOfManyStrings2);
+            CollectionAssert.Contains(result["test"][0].ListOfManyStrings, input["test"][0].ListOfManyStrings3);
+        }
     }
 
     internal class InputObject

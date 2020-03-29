@@ -21,13 +21,44 @@ namespace CocktailDb
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.TokenType == JsonToken.StartObject)
+            JObject item = JObject.Load(reader);
+
+            item = AddPropertiesRecursive(item, item.Root);
+
+            return item.ToObject(objectType, JsonSerializer.CreateDefault());
+        }
+
+        private JObject AddPropertiesRecursive(JObject item, JToken currentToken)
+        {
+            if (currentToken is JProperty)
             {
-                JObject item = JObject.Load(reader);
+                return item;
+            }
 
-                var propertyNames = item.Properties().Select(p => p.Name);
+            if (currentToken.Type == JTokenType.Array)
+            {
+                foreach (var child in currentToken.Children())
+                {
+                    item = AddPropertiesRecursive(item, child);
+                }
+            }
 
-                var propertyNamesGroupedByListName = propertyNames.Where(n => partOfAListRegex.IsMatch(n))
+            if (currentToken.Type == JTokenType.Object)
+            {
+                JObject jObject = currentToken as JObject;
+
+                foreach (var child in currentToken.Children<JProperty>())
+                {
+                    var grandChildren = child.Children();
+                    if (grandChildren.Count() == 1)
+                        item = AddPropertiesRecursive(item, grandChildren.Single());
+                }
+
+                var stringProperties = jObject.Children<JProperty>();
+
+                var propertiesDictionary = jObject.Children<JProperty>().ToDictionary(p => p.Name, p => p.Value.ToString());
+
+                var propertyNamesGroupedByListName = propertiesDictionary.Keys.Where(n => partOfAListRegex.IsMatch(n))
                     .GroupBy(n => partOfAListRegex.Match(n).Groups["ListName"].Value, n => n);
 
                 foreach (IGrouping<string, string> group in propertyNamesGroupedByListName)
@@ -38,16 +69,14 @@ namespace CocktailDb
 
                     foreach (var sourcePropertyName in sourcePropertyNames)
                     {
-                        newPropertyValue.Add(item.Property(sourcePropertyName).Value.Value<string>());
+                        newPropertyValue.Add(propertiesDictionary[sourcePropertyName]);
                     }
 
-                    item.Add(newPropertyName, JToken.FromObject(newPropertyValue));
+                    jObject.Add(newPropertyName, JToken.FromObject(newPropertyValue));
                 }
-
-                return item.ToObject(objectType, JsonSerializer.CreateDefault());
             }
 
-            throw new Exception();
+            return item;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
