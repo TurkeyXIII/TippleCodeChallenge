@@ -43,7 +43,21 @@ namespace Tests.CocktailDb
         [TestMethod]
         public void Deserialize_StringInListOfMany()
         {
-            Assert.Inconclusive();
+            var input = new InputObject
+            {
+                ListOfManyStrings1 = "abc",
+                ListOfManyStrings2 = "xyz",
+                ListOfManyStrings3 = "123",
+            };
+            string json = JsonConvert.SerializeObject(input);
+
+            var result = JsonConvert.DeserializeObject<ResultObject>(json, new ListJsonConverter());
+
+            Assert.AreEqual(3, result.ListOfManyStrings.Count);
+
+            CollectionAssert.Contains(result.ListOfManyStrings, input.ListOfManyStrings1);
+            CollectionAssert.Contains(result.ListOfManyStrings, input.ListOfManyStrings2);
+            CollectionAssert.Contains(result.ListOfManyStrings, input.ListOfManyStrings3);
         }
     }
 

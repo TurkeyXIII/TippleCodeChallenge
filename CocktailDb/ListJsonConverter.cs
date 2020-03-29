@@ -32,10 +32,16 @@ namespace CocktailDb
 
                 foreach (IGrouping<string, string> group in propertyNamesGroupedByListName)
                 {
-                    List<string> propertyValues = group.ToList();
-                    string propertyName = group.Key;
+                    List<string> sourcePropertyNames = group.ToList();
+                    List<string> newPropertyValue = new List<string>();
+                    string newPropertyName = group.Key;
 
-                    item.Add(propertyName, JToken.FromObject(propertyValues));
+                    foreach (var sourcePropertyName in sourcePropertyNames)
+                    {
+                        newPropertyValue.Add(item.Property(sourcePropertyName).Value.Value<string>());
+                    }
+
+                    item.Add(newPropertyName, JToken.FromObject(newPropertyValue));
                 }
 
                 return item.ToObject(objectType, JsonSerializer.CreateDefault());
