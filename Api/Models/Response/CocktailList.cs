@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,11 +22,36 @@ namespace api.Models.Response
         public ListMeta(List<Domain.Entities.Cocktail> cocktails)
         {
             count = cocktails.Count;
+            firstId = cocktails.Min(c => c.Id);
+            lastId = cocktails.Max(c => c.Id);
+
+            var ingredientCounts = cocktails.Select(c => c.Ingredients != null ? c.Ingredients.Count : 0);
+            medianIngredientCount = CalculateMedian(ingredientCounts);
         }
 
-        public int count { get; set; }    // number of results
-        public int firstId { get; set; }    // smallest Id of the results
-        public int lastId { get; set; }    // largest Id of the results
-        public int medianIngredientCount { get; set; }    // median of the number of ingredients per cocktail
+        private int CalculateMedian(IEnumerable<int> set)
+        {
+            var sortedSet = set.OrderBy(c => c).ToList();
+
+            bool evenNumberOfCounts = sortedSet.Count % 2 == 0;
+            if (evenNumberOfCounts)
+            {
+                int middleIndex2 = sortedSet.Count / 2;
+                int middleIndex1 = middleIndex2 - 1;
+
+                int averageOfMiddleValues = (sortedSet[middleIndex1] + sortedSet[middleIndex2]) / 2; //integer division intentional
+                return averageOfMiddleValues;
+            }
+            else
+            {
+                int middleIndex = (sortedSet.Count - 1) / 2;
+                return sortedSet[middleIndex];
+            }
+        }
+
+        public int count { get; set; }
+        public int firstId { get; set; }
+        public int lastId { get; set; }
+        public int medianIngredientCount { get; set; }
     }
 }

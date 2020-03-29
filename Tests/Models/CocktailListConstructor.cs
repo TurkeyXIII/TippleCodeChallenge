@@ -19,9 +19,9 @@ namespace Tests.Models
         {
             _simpleList = new List<Cocktail>
             {
-                new Cocktail { Name = "abc" },
-                new Cocktail { Name = "xyz" },
-                new Cocktail { Name = "123" },
+                new Cocktail { Name = "abc", Id = 100 },
+                new Cocktail { Name = "xyz", Id = 512 },
+                new Cocktail { Name = "123", Id = 37 },
             };
         }
 
@@ -49,19 +49,86 @@ namespace Tests.Models
         [TestMethod]
         public void MetadataHasCorrectIdRange()
         {
-            Assert.Inconclusive();
+            CocktailList cocktailList = new CocktailList(_simpleList);
+
+            Assert.AreEqual(37, cocktailList.meta.firstId);
+            Assert.AreEqual(512, cocktailList.meta.lastId);
         }
 
         [TestMethod]
         public void MetadataHasCorrectMedianIngredient_Simple()
         {
-            Assert.Inconclusive();
+            List<Cocktail> cocktailsWithIngredients = new List<Cocktail>
+            {
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1" },
+                },
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1", "2" },
+                },
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1", "2", "3" },
+                }
+            };
+
+            CocktailList cocktailList = new CocktailList(cocktailsWithIngredients);
+
+            Assert.AreEqual(2, cocktailList.meta.medianIngredientCount);
         }
 
         [TestMethod]
-        public void MetadataHasCorrectMedianIngredient_LargeVariation()
+        public void MetadataHasCorrectMedianIngredient_ManyWithSameCount()
         {
-            Assert.Inconclusive();
+            List<Cocktail> cocktailsWithIngredients = new List<Cocktail>
+            {
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1" },
+                },
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1" },
+                },
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1" },
+                },
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1" },
+                },
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1", "2", "3", "4", "5", "6" },
+                }
+            };
+
+            CocktailList cocktailList = new CocktailList(cocktailsWithIngredients);
+
+            Assert.AreEqual(1, cocktailList.meta.medianIngredientCount);
+        }
+
+        [TestMethod]
+        public void MetadataHasCorrectMedianIngredient_EvenNumberOfCocktails()
+        {
+            List<Cocktail> cocktailsWithIngredients = new List<Cocktail>
+            {
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1", "2" },
+                },
+                new Cocktail
+                {
+                    Ingredients = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
+                },
+            };
+
+            CocktailList cocktailList = new CocktailList(cocktailsWithIngredients);
+
+            Assert.AreEqual((int)5.5, cocktailList.meta.medianIngredientCount);
         }
     }
 }
